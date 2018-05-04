@@ -2,6 +2,8 @@ FORMULAS_PATH = "formulas.txt"
 
 file = open(FORMULAS_PATH, "r")
 
+file = open("formulas.txt", "r")
+
 print(file.read())
 file.seek(0)
 lines = file.readlines()
@@ -35,18 +37,46 @@ def read_formula(formula):
   front_bracket = None
   back_bracket = None
   
-  vars_ = []
+  consts_ = []
+  consts_use = {}
   
   for ind, char in enumerate(list(formula_)):
-    if front_bracket == None and char == "<":
+    if front_brackaet == None and char == "{":
       front_bracket = ind
     
-    if back_bracket == None and front_bracket != None and char == ">":
+    if back_bracket == None and front_bracket != None and char == "}":
       back_bracket = ind
-      vars_.append(formula_[front_bracket+1:back_bracket])
+      consts_.append(formula_[front_bracket+1:back_bracket])
       back_bracket, front_bracket = None, None
   
-  return parsed_formula
+  print(consts_)
+  if "pi" in consts_:
+    consts_use["pi"] = 3.1415926535
+  
+  # for const_ in consts_:
+    # if const_ in CONSTS.keys:
+      
+  
+  def formula_calc(**kwargs):
+    kwargs.update(consts_use)
+    print(kwargs)
+    print(formula_)
+    return eval(formula_.format(**kwargs))
+  
+  formula_calc.__name__ = out_name
+  
+  return formula_calc
 
-print(read_formula(formulas[0]))
-print(read_formula(formulas[1]))
+# print(read_formula(formulas[0])(W=5, L=5))
+# print(read_formula(formulas[1])(W=5, L=5))
+
+
+# circlearea = read_formula(formulas[2])
+# print(circlearea(r=4))
+
+# sphere_volume = read_formula(formulas[3])
+# print(sphere_volume(r=4))
+
+# randoms = read_formula(formulas[4])
+# print(randoms(x=9.5))
+
